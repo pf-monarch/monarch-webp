@@ -1,0 +1,53 @@
+{
+  "name": "Booking",
+  "type": "object",
+  "properties": {
+    "booking_reference": {
+      "type": "string",
+      "description": "Unique booking reference"
+    },
+    "discord_username": {
+      "type": "string",
+      "description": "Passenger's Discord username"
+    },
+    "departing_destination": {
+      "type": "string",
+      "description": "Departure airport/city"
+    },
+    "arriving_destination": {
+      "type": "string",
+      "description": "Arrival airport/city"
+    },
+    "departure_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Departure date"
+    },
+    "departure_time": {
+      "type": "string",
+      "description": "Departure time (Zulu)"
+    },
+    "aircraft_preference": {
+      "type": "string",
+      "description": "Preferred aircraft for the charter"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "confirmed",
+        "pending",
+        "cancelled"
+      ],
+      "default": "pending",
+      "description": "Booking status"
+    }
+  },
+  "required": [
+    "booking_reference",
+    "discord_username",
+    "departing_destination",
+    "arriving_destination",
+    "departure_date",
+    "departure_time"
+  ]
+}

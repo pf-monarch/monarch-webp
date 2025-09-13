@@ -1,0 +1,253 @@
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { motion } from "framer-motion";
+import { Users, Gauge, MapPin, Clock, Fuel, Settings } from "lucide-react";
+
+const aircraftData = [
+  {
+    name: "Cessna Citation",
+    type: "Business Jet",
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/b151b6f6f_Screenshot2025-08-30at100015AM.png",
+    category: "Private",
+    specs: {
+      passengers: "6-8",
+      range: "2,100 nm",
+      cruiseSpeed: "460 kts",
+      maxAltitude: "45,000 ft"
+    },
+    features: ["Executive Seating", "Advanced Avionics", "Wi-Fi Enabled", "Catering Service"],
+    description: "Perfect for executive travel and private charters, offering luxury and efficiency for short to medium-haul flights."
+  },
+  {
+    name: "Bombardier Q400",
+    type: "Regional Turboprop",
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/f1cad8a42_image.png",
+    category: "Regional",
+    specs: {
+      passengers: "68-78",
+      range: "1,362 nm",
+      cruiseSpeed: "360 kts",
+      maxAltitude: "27,000 ft"
+    },
+    features: ["Noise Reduction System", "Fuel Efficient", "Short Runway Capable", "Modern Cabin"],
+    description: "Versatile regional aircraft ideal for connecting smaller airports with excellent fuel efficiency and passenger comfort."
+  },
+  {
+    name: "Airbus A320",
+    type: "Narrow-body Airliner",
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/b93283bc5_image.png",
+    category: "Commercial",
+    specs: {
+      passengers: "150-180",
+      range: "3,300 nm",
+      cruiseSpeed: "447 kts",
+      maxAltitude: "39,100 ft"
+    },
+    features: ["Fly-by-Wire Controls", "Fuel Efficient", "Spacious Cabin", "Advanced Systems"],
+    description: "The backbone of modern aviation, offering reliability and efficiency for short to medium-haul routes worldwide."
+  },
+  {
+    name: "Airbus A350",
+    type: "Wide-body Airliner",
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/4fdb6e5af_image.png",
+    category: "Long-Haul",
+    specs: {
+      passengers: "300-350",
+      range: "8,000 nm",
+      cruiseSpeed: "493 kts",
+      maxAltitude: "43,100 ft"
+    },
+    features: ["Carbon Fiber Fuselage", "Sharklet Technology", "Premium Cabins", "Ultra-Long Range"],
+    description: "Next-generation wide-body aircraft designed for ultra-long-haul routes with exceptional fuel efficiency and passenger comfort."
+  },
+  {
+    name: "Boeing 737",
+    type: "Narrow-body Airliner",
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/7774c38d4_image.png",
+    category: "Commercial",
+    specs: {
+      passengers: "138-189",
+      range: "3,500 nm",
+      cruiseSpeed: "453 kts",
+      maxAltitude: "41,000 ft"
+    },
+    features: ["Proven Reliability", "Advanced Cockpit", "Efficient Operations", "Global Support"],
+    description: "The world's most popular commercial aircraft, known for its reliability, efficiency, and versatility across various route networks."
+  },
+  {
+    name: "Boeing 777",
+    type: "Wide-body Airliner",
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/f287fecea_image.png",
+    category: "Long-Haul",
+    specs: {
+      passengers: "300-400",
+      range: "9,700 nm",
+      cruiseSpeed: "490 kts",
+      maxAltitude: "43,100 ft"
+    },
+    features: ["Twin-Engine Efficiency", "Spacious Interior", "Extended Range", "Premium Service"],
+    description: "Flagship long-haul aircraft offering exceptional range and capacity, perfect for transcontinental and international routes."
+  }
+];
+
+const categoryColors = {
+  "Private": "bg-purple-100 text-purple-800",
+  "Regional": "bg-blue-100 text-blue-800",
+  "Commercial": "bg-green-100 text-green-800",
+  "Long-Haul": "bg-amber-100 text-amber-800"
+};
+
+const AircraftCard = ({ aircraft, index }) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
+      viewport={{ once: true }}
+    >
+      <Card className="overflow-hidden group hover:shadow-2xl transition-all duration-500 h-full">
+        <div className="relative overflow-hidden">
+          <img
+            src={aircraft.image}
+            alt={aircraft.name}
+            className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-700"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+          <div className="absolute top-4 left-4">
+            <Badge className={categoryColors[aircraft.category]}>
+              {aircraft.category}
+            </Badge>
+          </div>
+          <div className="absolute bottom-4 left-4 text-white">
+            <h3 className="text-xl font-bold">{aircraft.name}</h3>
+            <p className="text-blue-100">{aircraft.type}</p>
+          </div>
+        </div>
+        
+        <CardContent className="p-6 space-y-4">
+          <p className="text-slate-600 text-sm leading-relaxed">
+            {aircraft.description}
+          </p>
+          
+          {/* Specifications */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="flex items-center gap-2 text-sm">
+              <Users className="h-4 w-4 text-blue-600" />
+              <span className="text-slate-600">Passengers:</span>
+              <span className="font-semibold">{aircraft.specs.passengers}</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm">
+              <MapPin className="h-4 w-4 text-green-600" />
+              <span className="text-slate-600">Range:</span>
+              <span className="font-semibold">{aircraft.specs.range}</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm">
+              <Gauge className="h-4 w-4 text-purple-600" />
+              <span className="text-slate-600">Cruise:</span>
+              <span className="font-semibold">{aircraft.specs.cruiseSpeed}</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm">
+              <Clock className="h-4 w-4 text-amber-600" />
+              <span className="text-slate-600">Ceiling:</span>
+              <span className="font-semibold">{aircraft.specs.maxAltitude}</span>
+            </div>
+          </div>
+
+          {/* Features */}
+          <div>
+            <h4 className="font-semibold text-slate-800 mb-2 flex items-center gap-2">
+              <Settings className="h-4 w-4" />
+              Key Features
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              {aircraft.features.map((feature, idx) => (
+                <Badge key={idx} variant="secondary" className="text-xs">
+                  {feature}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
+};
+
+export default function FleetPage() {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
+          <h1 className="text-4xl md:text-5xl font-bold text-slate-800 mb-4">
+            Our Fleet
+          </h1>
+          <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+            Discover our diverse range of aircraft, from executive jets to long-haul airliners, 
+            each maintained to the highest standards for your virtual aviation experience.
+          </p>
+        </motion.div>
+
+        {/* Fleet Stats */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16"
+        >
+          <div className="text-center p-6 bg-white rounded-xl shadow-md">
+            <div className="text-3xl font-bold text-blue-600 mb-2">6</div>
+            <div className="text-slate-600">Aircraft Types</div>
+          </div>
+          <div className="text-center p-6 bg-white rounded-xl shadow-md">
+            <div className="text-3xl font-bold text-green-600 mb-2">4</div>
+            <div className="text-slate-600">Categories</div>
+          </div>
+          <div className="text-center p-6 bg-white rounded-xl shadow-md">
+            <div className="text-3xl font-bold text-purple-600 mb-2">90+</div>
+            <div className="text-slate-600">Flights Logged</div>
+          </div>
+          <div className="text-center p-6 bg-white rounded-xl shadow-md">
+            <div className="text-3xl font-bold text-amber-600 mb-2">24/7</div>
+            <div className="text-slate-600">Availability</div>
+          </div>
+        </motion.div>
+
+        {/* Aircraft Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {aircraftData.map((aircraft, index) => (
+            <AircraftCard key={aircraft.name} aircraft={aircraft} index={index} />
+          ))}
+        </div>
+
+        {/* CTA Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="text-center mt-16 p-12 bg-gradient-to-r from-blue-600 to-sky-600 rounded-2xl text-white"
+        >
+          <h2 className="text-3xl font-bold mb-4">Ready to Fly?</h2>
+          <p className="text-xl mb-6 opacity-90">
+            Join Monarch Air Virtual and experience our premium fleet in your favorite flight simulator.
+          </p>
+          <a 
+            href="https://discord.gg/Q5PVZzfTFX" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="inline-block bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-slate-100 transition-colors"
+          >
+            Join Our Community
+          </a>
+        </motion.div>
+      </div>
+    </div>
+  );
+}

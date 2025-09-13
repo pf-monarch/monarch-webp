@@ -1,0 +1,61 @@
+{
+  "name": "Flight",
+  "type": "object",
+  "properties": {
+    "flight_number": {
+      "type": "string",
+      "description": "Flight number identifier"
+    },
+    "origin": {
+      "type": "string",
+      "description": "Departure city/airport"
+    },
+    "destination": {
+      "type": "string",
+      "description": "Arrival city/airport"
+    },
+    "departure_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Departure date"
+    },
+    "departure_time": {
+      "type": "string",
+      "description": "Departure time"
+    },
+    "arrival_time": {
+      "type": "string",
+      "description": "Arrival time"
+    },
+    "duration": {
+      "type": "string",
+      "description": "Flight duration"
+    },
+    "price_economy": {
+      "type": "number",
+      "description": "Economy class price"
+    },
+    "price_business": {
+      "type": "number",
+      "description": "Business class price"
+    },
+    "price_first": {
+      "type": "number",
+      "description": "First class price"
+    },
+    "aircraft_type": {
+      "type": "string",
+      "description": "Type of aircraft"
+    },
+    "available_seats": {
+      "type": "number",
+      "description": "Number of available seats"
+    }
+  },
+  "required": [
+    "flight_number",
+    "origin",
+    "destination",
+    "departure_date"
+  ]
+}

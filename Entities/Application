@@ -1,0 +1,40 @@
+{
+  "name": "Application",
+  "type": "object",
+  "properties": {
+    "applicant_name": {
+      "type": "string",
+      "description": "Full name of the applicant"
+    },
+    "applicant_email": {
+      "type": "string",
+      "format": "email",
+      "description": "Email address of the applicant"
+    },
+    "applying_for_role": {
+      "type": "string",
+      "description": "The role the user is applying for"
+    },
+    "reason": {
+      "type": "string",
+      "description": "Applicant's reason for applying"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "reviewed",
+        "accepted",
+        "rejected"
+      ],
+      "default": "pending",
+      "description": "Status of the application"
+    }
+  },
+  "required": [
+    "applicant_name",
+    "applicant_email",
+    "applying_for_role",
+    "reason"
+  ]
+}

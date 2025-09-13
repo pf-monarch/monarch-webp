@@ -1,0 +1,51 @@
+{
+  "name": "Destination",
+  "type": "object",
+  "properties": {
+    "city": {
+      "type": "string",
+      "description": "Destination city name"
+    },
+    "country": {
+      "type": "string",
+      "description": "Country name"
+    },
+    "airport_code": {
+      "type": "string",
+      "description": "Airport IATA code"
+    },
+    "description": {
+      "type": "string",
+      "description": "Destination description"
+    },
+    "image_url": {
+      "type": "string",
+      "description": "Destination image URL"
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this is a featured destination"
+    },
+    "price_from": {
+      "type": "number",
+      "description": "Starting price for flights to this destination"
+    },
+    "weather": {
+      "type": "string",
+      "description": "Current weather/season information"
+    },
+    "highlights": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Key attractions and highlights"
+    }
+  },
+  "required": [
+    "city",
+    "country",
+    "airport_code"
+  ]
+}

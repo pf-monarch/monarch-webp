@@ -1,0 +1,157 @@
+import React, { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Application } from "@/entities/Application";
+import { CheckCircle, Loader2 } from "lucide-react";
+
+export default function ApplicationModal({ isOpen, onClose, role }) {
+  const [formData, setFormData] = useState({ name: "", email: "", reason: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const requirements = {
+    "Chief Moderation Officer": [
+      "Minimum 2 years experience in moderation or community management",
+      "Strong leadership and communication skills",
+      "Understanding of virtual airline operations",
+      "Ability to handle conflicts and enforce community guidelines",
+      "Experience with Discord server management"
+    ],
+    "Chief Operating Officer": [
+      "Minimum 3 years experience in operations management",
+      "Strong organizational and analytical skills",
+      "Experience with flight simulation platforms",
+      "Ability to oversee daily operations and efficiency",
+      "Leadership experience in virtual aviation"
+    ],
+    "Chief Commercial Officer": [
+      "Minimum 2 years experience in business development or marketing",
+      "Strong communication and negotiation skills",
+      "Understanding of virtual airline commercial operations",
+      "Experience with partnerships and revenue generation",
+      "Creative thinking for business growth"
+    ],
+    "Director of Flight Operations": [
+      "Minimum 2 years experience in flight operations",
+      "Deep understanding of flight simulation platforms",
+      "Knowledge of aviation procedures and regulations",
+      "Ability to manage flight schedules and routes",
+      "Strong attention to detail and safety protocols"
+    ],
+    "Relations Officer": [
+      "Excellent communication and interpersonal skills",
+      "Experience in customer service or public relations",
+      "Understanding of virtual airline community dynamics",
+      "Ability to maintain positive relationships with partners",
+      "Social media and community engagement experience"
+    ],
+    "HR Team": [
+      "Experience in human resources or people management",
+      "Strong interpersonal and communication skills",
+      "Ability to handle recruitment and staff relations",
+      "Understanding of virtual airline organizational structure",
+      "Conflict resolution and mediation skills"
+    ],
+    "Marketing Team": [
+      "Experience in digital marketing or content creation",
+      "Creative skills in design or video production",
+      "Understanding of social media marketing",
+      "Ability to create engaging promotional content",
+      "Knowledge of virtual aviation community"
+    ],
+    "IT Team": [
+      "Technical skills in web development or system administration",
+      "Experience with Discord bots or server management",
+      "Understanding of database management",
+      "Problem-solving and troubleshooting abilities",
+      "Ability to work with virtual airline systems"
+    ]
+  };
+
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({ ...prev, [id]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      await Application.create({
+        applicant_name: formData.name,
+        applicant_email: formData.email,
+        applying_for_role: role,
+        reason: formData.reason,
+      });
+      setIsSubmitted(true);
+    } catch (error) {
+      console.error("Failed to submit application:", error);
+      alert("There was an error submitting your application. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleClose = () => {
+    onClose();
+    setTimeout(() => {
+      setFormData({ name: "", email: "", reason: "" });
+      setIsSubmitted(false);
+      setIsSubmitting(false);
+    }, 300);
+  };
+  
+  return (
+    <Dialog open={isOpen} onOpenChange={handleClose}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle className="text-2xl">Apply for {role}</DialogTitle>
+          <DialogDescription>
+            Please review the requirements and submit your application below.
+          </DialogDescription>
+        </DialogHeader>
+
+        {isSubmitted ? (
+          <div className="flex flex-col items-center justify-center py-10 text-center">
+            <CheckCircle className="h-16 w-16 text-green-500 mb-4" />
+            <h3 className="text-xl font-bold mb-2">Application Submitted!</h3>
+            <p className="text-slate-600">Thank you for your interest. We will review your application and get back to you soon.</p>
+          </div>
+        ) : (
+          <>
+            <div className="my-4">
+              <h4 className="font-semibold mb-2">Requirements:</h4>
+              <ul className="list-disc list-inside space-y-1 text-slate-600 text-sm">
+                {(requirements[role] || ["No specific requirements listed."]).map((req, i) => (
+                  <li key={i}>{req}</li>
+                ))}
+              </ul>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <Input id="name" placeholder="Your Full Name" value={formData.name} onChange={handleInputChange} required />
+              <Input id="email" type="email" placeholder="Your Email" value={formData.email} onChange={handleInputChange} required />
+              <Textarea id="reason" placeholder="Why are you a good fit for this role?" value={formData.reason} onChange={handleInputChange} required />
+              <DialogFooter>
+                <Button type="button" variant="outline" onClick={handleClose}>Cancel</Button>
+                <Button type="submit" disabled={isSubmitting} className="bg-blue-600 hover:bg-blue-700">
+                  {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  Submit Application
+                </Button>
+              </DialogFooter>
+            </form>
+          </>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}

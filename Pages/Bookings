@@ -1,0 +1,274 @@
+
+import React, { useState, useEffect } from "react";
+import { Destination, Booking } from "@/entities/all";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { MapPin, Star, ArrowRight, Calendar, Clock, CheckCircle } from "lucide-react";
+import { motion } from "framer-motion";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter
+} from "@/components/ui/dialog";
+
+const aircraftFleet = [
+  "Cessna Citation",
+  "Bombardier Q400",
+  "Airbus A320",
+  "Airbus A350",
+  "Boeing 737",
+  "Boeing 777"
+];
+
+export default function BookingsPage() {
+  const [destinations, setDestinations] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedDestination, setSelectedDestination] = useState(null);
+  const [isBooking, setIsBooking] = useState(false);
+  const [bookingDetails, setBookingDetails] = useState({
+    discord_username: "",
+    departing_destination: "",
+    departure_date: "",
+    departure_time: "",
+    aircraft_preference: ""
+  });
+  const [bookingSuccess, setBookingSuccess] = useState(false);
+
+  const loadDestinations = async () => {
+    try {
+      const data = await Destination.list("-created_date");
+      setDestinations(data);
+    } catch (error) {
+      console.error("Error loading destinations:", error);
+    }
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    loadDestinations();
+  }, []);
+
+  const handleBookNow = (destination) => {
+    setSelectedDestination(destination);
+  };
+
+  const handleBookingSubmit = async (e) => {
+    e.preventDefault();
+    if (!selectedDestination || !bookingDetails.discord_username || !bookingDetails.departing_destination || !bookingDetails.departure_date || !bookingDetails.departure_time) return;
+
+    setIsBooking(true);
+    try {
+      const newBooking = {
+        booking_reference: `MAV-${Math.random().toString(36).substr(2, 6).toUpperCase()}`,
+        discord_username: bookingDetails.discord_username,
+        departing_destination: bookingDetails.departing_destination,
+        arriving_destination: selectedDestination.city,
+        departure_date: bookingDetails.departure_date,
+        departure_time: `${bookingDetails.departure_time}Z`, // Append 'Z' for Zulu time
+        aircraft_preference: bookingDetails.aircraft_preference,
+        status: "pending", // Changed from 'confirmed' as it's a request
+      };
+      await Booking.create(newBooking);
+      setBookingSuccess(true);
+    } catch (error) {
+      console.error("Error creating booking:", error);
+      alert("An error occurred while booking. Please try again.");
+    } finally {
+      setIsBooking(false);
+    }
+  };
+
+  const closeDialogs = () => {
+    setSelectedDestination(null);
+    setBookingSuccess(false);
+    setBookingDetails({
+      discord_username: "",
+      departing_destination: "",
+      departure_date: "",
+      departure_time: "",
+      aircraft_preference: ""
+    });
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12"
+        >
+          <h1 className="text-4xl md:text-5xl font-bold text-slate-800 mb-4">
+            Book Your Flight
+          </h1>
+          <p className="text-xl text-slate-600 max-w-2xl mx-auto">
+            Choose your destination and book your virtual charter flight with Monarch Air Virtual.
+          </p>
+        </motion.div>
+
+        {/* Destinations Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {isLoading ? (
+            Array(8).fill(0).map((_, index) => (
+              <Card key={index} className="overflow-hidden">
+                <Skeleton className="h-48 w-full" />
+                <CardContent className="p-6">
+                  <Skeleton className="h-4 w-3/4 mb-2" />
+                  <Skeleton className="h-4 w-1/2 mb-4" />
+                  <Skeleton className="h-10 w-full" />
+                </CardContent>
+              </Card>
+            ))
+          ) : destinations.length > 0 ? (
+            destinations.map((destination, index) => (
+              <motion.div
+                key={destination.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.05 }}
+              >
+                <Card className="overflow-hidden group hover:shadow-2xl transition-all duration-500 h-full flex flex-col">
+                  <div className="relative overflow-hidden">
+                    <img
+                      src={destination.image_url || `https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80`}
+                      alt={destination.city}
+                      className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                    <div className="absolute bottom-4 left-4 text-white">
+                      <h3 className="text-lg font-bold">{destination.city}, {destination.airport_code}</h3>
+                      <p className="text-blue-100 flex items-center gap-1 text-sm">
+                        <MapPin className="h-3 w-3" />
+                        {destination.country}
+                      </p>
+                    </div>
+                  </div>
+                  <CardContent className="p-6 flex-1 flex flex-col justify-between">
+                    <p className="text-slate-600 mb-4 line-clamp-3 text-sm">
+                      {destination.description || "Discover the beauty and culture of this amazing destination."}
+                    </p>
+                    <Button 
+                      onClick={() => handleBookNow(destination)}
+                      className="w-full mt-4 group bg-blue-600 hover:bg-blue-700"
+                    >
+                      Book Now
+                      <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))
+          ) : (
+            <div className="col-span-full text-center py-12">
+              <p className="text-slate-500 text-lg">No destinations available for booking yet.</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Booking Modal */}
+      <Dialog open={!!selectedDestination && !bookingSuccess} onOpenChange={closeDialogs}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Book Charter Flight</DialogTitle>
+            <DialogDescription>
+              Please fill out the details below to request your charter flight.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleBookingSubmit}>
+            <div className="space-y-4 py-4">
+               <Input
+                placeholder="Discord Username"
+                value={bookingDetails.discord_username}
+                onChange={(e) => setBookingDetails({ ...bookingDetails, discord_username: e.target.value })}
+                required
+              />
+              <div className="grid grid-cols-2 gap-4">
+                 <Input
+                  placeholder="Departing Destination"
+                  value={bookingDetails.departing_destination}
+                  onChange={(e) => setBookingDetails({ ...bookingDetails, departing_destination: e.target.value })}
+                  required
+                />
+                 <Input
+                  placeholder="Arriving Destination"
+                  value={selectedDestination?.city}
+                  readOnly
+                  className="bg-slate-100"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label htmlFor="departure-date" className="text-sm font-medium sr-only">Departure Date</label>
+                  <Input
+                    id="departure-date"
+                    type="date"
+                    value={bookingDetails.departure_date}
+                    onChange={(e) => setBookingDetails({ ...bookingDetails, departure_date: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor="departure-time" className="text-sm font-medium sr-only">Departure Time (Zulu)</label>
+                  <Input
+                    id="departure-time"
+                    type="time"
+                    value={bookingDetails.departure_time}
+                    onChange={(e) => setBookingDetails({ ...bookingDetails, departure_time: e.target.value })}
+                    required
+                  />
+                </div>
+              </div>
+              <div>
+                <Select onValueChange={(value) => setBookingDetails({...bookingDetails, aircraft_preference: value})}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Choose your preferred aircraft" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {aircraftFleet.map(aircraft => (
+                      <SelectItem key={aircraft} value={aircraft}>{aircraft}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-slate-500 mt-2">Please note: Your chosen aircraft might not be guaranteed.</p>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={closeDialogs}>Cancel</Button>
+              <Button type="submit" disabled={isBooking} className="bg-blue-600 hover:bg-blue-700">
+                {isBooking ? "Booking..." : "Confirm Charter"}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Success Modal */}
+      <Dialog open={bookingSuccess} onOpenChange={closeDialogs}>
+        <DialogContent>
+          <DialogHeader>
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+              <CheckCircle className="h-6 w-6 text-green-600" />
+            </div>
+            <DialogTitle className="text-center">Charter Flight Booked!</DialogTitle>
+            <DialogDescription className="text-center">
+              Your charter flight to {selectedDestination?.city} has been successfully requested. You will receive confirmation details via Discord/Email.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button onClick={closeDialogs} className="w-full">Close</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}

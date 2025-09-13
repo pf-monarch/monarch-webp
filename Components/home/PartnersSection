@@ -1,0 +1,73 @@
+import React from 'react';
+import { motion } from 'framer-motion';
+
+const partners = [
+  { 
+    name: 'Qatar Airways Virtual', 
+    logoUrl: 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/d0e57c9b0_qa.jpg',
+    linkUrl: 'https://discord.gg/vegPpGtS4d'
+  },
+  {
+    name: 'Qantas',
+    logoUrl: 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/8b80d87d5_qan.jpeg',
+    linkUrl: 'https://discord.gg/yFrymH5s5V'
+  }
+];
+
+export default function PartnersSection() {
+  return (
+    <section className="py-16 bg-slate-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-center mb-12"
+        >
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4">
+            Our Valued Partners
+          </h2>
+          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+            We are proud to collaborate with leading virtual airlines to enhance your simulation experience.
+          </p>
+        </motion.div>
+
+        <div className="relative overflow-hidden max-w-2xl mx-auto">
+          <motion.div
+            animate={{ x: [-400, 0] }}
+            transition={{
+              x: { 
+                repeat: Infinity,
+                repeatType: "loop",
+                duration: 10,
+                ease: "linear"
+              }
+            }}
+            className="flex gap-12"
+          >
+            {/* Triple the partners array for seamless infinite loop */}
+            {[...partners, ...partners, ...partners].map((partner, index) => (
+              <a href={partner.linkUrl} target="_blank" rel="noopener noreferrer" key={index}>
+                <motion.div
+                  whileHover={{ scale: 1.1, transition: { duration: 0.3 } }}
+                  className="w-24 h-24 rounded-full overflow-hidden shadow-lg cursor-pointer bg-slate-200 flex items-center justify-center flex-shrink-0"
+                >
+                  <img 
+                    src={partner.logoUrl} 
+                    alt={partner.name} 
+                    className="w-full h-full object-cover" 
+                  />
+                </motion.div>
+              </a>
+            ))}
+          </motion.div>
+        </div>
+        
+        <p className="text-center text-slate-500 mt-8 text-sm font-semibold">
+          A Member of Star Alliance
+        </p>
+      </div>
+    </section>
+  );
+}

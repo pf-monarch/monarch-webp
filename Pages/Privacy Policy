@@ -1,0 +1,97 @@
+import React from "react";
+import { motion } from "framer-motion";
+import { Shield, Mail } from "lucide-react";
+
+export default function PrivacyPolicyPage() {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white py-12">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12"
+        >
+          <Shield className="h-16 w-16 text-blue-600 mx-auto mb-4" />
+          <h1 className="text-4xl font-bold text-slate-800 mb-4">
+            Monarch Air Privacy Policy
+          </h1>
+          <p className="text-lg text-slate-600">
+            Effective Date: 31/08/2025 | Last Updated: 31/08/2025
+          </p>
+        </motion.div>
+
+        <div className="prose prose-lg max-w-none">
+          <p className="text-slate-700 leading-relaxed mb-6">
+            Monarch Air ("we," "our," or "us") values your privacy. This Privacy Policy explains how we collect, use, and protect your information when you interact with our Discord server, Roblox experiences, and official website.
+          </p>
+
+          <h2 className="text-2xl font-bold text-slate-800 mb-4">1. Information We Collect</h2>
+          <p className="text-slate-700 mb-4">When you use our services, we may collect the following types of information:</p>
+          <ul className="list-disc pl-6 space-y-2 text-slate-700 mb-6">
+            <li><strong>Discord Information:</strong> Username, Discord ID, messages or content you voluntarily share (e.g., flight logs, staff applications).</li>
+            <li><strong>Roblox Information:</strong> Roblox username, in-game activity (such as flights or events), and group membership.</li>
+            <li><strong>Website Information:</strong> When you visit our website, we may collect basic data such as your IP address, browser type, and pages visited.</li>
+            <li><strong>Voluntary Submissions:</strong> Information you provide when applying for staff, reporting issues, or contacting us.</li>
+          </ul>
+
+          <h2 className="text-2xl font-bold text-slate-800 mb-4">2. How We Use Your Information</h2>
+          <p className="text-slate-700 mb-4">We use your information to:</p>
+          <ul className="list-disc pl-6 space-y-2 text-slate-700 mb-6">
+            <li>Operate our Roblox Virtual Airline and Discord server.</li>
+            <li>Log flights and maintain pilot records.</li>
+            <li>Manage staff recruitment, training, and promotions.</li>
+            <li>Improve community events, services, and experiences.</li>
+            <li>Keep our platforms safe and free from misuse.</li>
+          </ul>
+
+          <h2 className="text-2xl font-bold text-slate-800 mb-4">3. How We Share Information</h2>
+          <p className="text-slate-700 mb-4">We do not sell or trade your data. Your information may only be shared in these limited cases:</p>
+          <ul className="list-disc pl-6 space-y-2 text-slate-700 mb-6">
+            <li>With authorized Monarch Air staff for operational purposes.</li>
+            <li>With Discord or Roblox, if required by their Terms of Service.</li>
+            <li>If legally required to comply with laws or protect our community.</li>
+          </ul>
+
+          <h2 className="text-2xl font-bold text-slate-800 mb-4">4. Data Protection</h2>
+          <p className="text-slate-700 mb-4">We take reasonable steps to protect your data, including:</p>
+          <ul className="list-disc pl-6 space-y-2 text-slate-700 mb-6">
+            <li>Restricted staff access to sensitive information.</li>
+            <li>Secure storage of flight logs and applications.</li>
+            <li>Regular monitoring for unauthorized access or misuse.</li>
+          </ul>
+
+          <h2 className="text-2xl font-bold text-slate-800 mb-4">5. Your Rights</h2>
+          <p className="text-slate-700 mb-4">As a user, you have the right to:</p>
+          <ul className="list-disc pl-6 space-y-2 text-slate-700 mb-6">
+            <li>Request access to your stored data.</li>
+            <li>Request correction or deletion of your data.</li>
+            <li>Leave our Discord server or Roblox group at any time, which stops further data collection.</li>
+          </ul>
+
+          <h2 className="text-2xl font-bold text-slate-800 mb-4">6. Third-Party Services</h2>
+          <p className="text-slate-700 mb-4">
+            Our platforms rely on third-party services such as Discord, Roblox, and website hosting providers. Your data may also be subject to their respective Privacy Policies. We encourage you to review them:
+          </p>
+          <ul className="list-disc pl-6 space-y-2 text-slate-700 mb-6">
+            <li><a href="https://discord.com/privacy" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">Discord Privacy Policy</a></li>
+            <li><a href="https://en.help.roblox.com/hc/en-us/articles/115004630823-Roblox-Privacy-and-Cookie-Policy" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">Roblox Privacy Policy</a></li>
+          </ul>
+
+          <h2 className="text-2xl font-bold text-slate-800 mb-4">7. Changes to This Policy</h2>
+          <p className="text-slate-700 mb-6">
+            We may update this Privacy Policy as needed. Any updates will be posted on this page with a new effective date.
+          </p>
+
+          <h2 className="text-2xl font-bold text-slate-800 mb-4">8. Contact Us</h2>
+          <p className="text-slate-700 mb-4">
+            If you have any questions or concerns about this Privacy Policy, you can contact us via:
+          </p>
+          <p className="text-slate-700">
+            <strong>Discord:</strong> <a href="https://discord.gg/QRwWsCr4Du" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">Monarch Air Official Server</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
