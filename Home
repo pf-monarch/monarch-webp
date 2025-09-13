@@ -1,0 +1,52 @@
+import React, { useState, useEffect } from "react";
+import { Destination } from "@/entities/all";
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+
+import HeroSection from "../components/home/HeroSection";
+import ServiceFeatures from "../components/home/ServiceFeatures";
+import WhyChooseUs from "../components/home/WhyChooseUs";
+import PartnersSection from "../components/home/PartnersSection";
+
+export default function HomePage() {
+  const [destinations, setDestinations] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
+    try {
+      const destinationsData = await Destination.filter({ featured: true }, '-created_date', 6);
+      setDestinations(destinationsData);
+    } catch (error) {
+      console.error("Error loading data:", error);
+    }
+    setIsLoading(false);
+  };
+
+  return (
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <HeroSection />
+
+      {/* Why Choose Monarch Air */}
+      <section className="py-16 bg-slate-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <ServiceFeatures />
+        </div>
+      </section>
+
+      {/* Why Choose Us */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <WhyChooseUs />
+        </div>
+      </section>
+
+      {/* Partners Section */}
+      <PartnersSection />
+    </div>
+  );
+}
